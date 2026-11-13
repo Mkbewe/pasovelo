@@ -47,6 +47,11 @@ Prototype: http://localhost:3000/prototype.html
 | `pnpm task` | Create a branch from an issue on the Pasovelo board |
 | `pnpm check:all` | typecheck + lint + format + test |
 
+## Commit convention
+
+Commits and PR titles follow Conventional Commits. Subjects start with a
+lowercase letter; acronyms and module names keep their case.
+
 ## CI
 
 GitHub Actions runs code quality checks and tests on pushes and pull requests to `main`, and validates PR titles against Conventional Commits.
@@ -64,6 +69,7 @@ docs/             # Project plan
 ## Documentation
 
 - [`docs/PLAN.md`](docs/PLAN.md) — decisions, architecture, roadmap
+- [`docs/DECISIONS.md`](docs/DECISIONS.md) — confirmed and open project decisions
 - [`public/prototype.html`](public/prototype.html) — UI prototype (served at `/prototype.html`)
 
 ## License

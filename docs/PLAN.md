@@ -1,10 +1,12 @@
 # Plan wdrożenia — Pasovelo (trener odmiany hiszpańskiej)
 
-**Wersja:** 0.3  
+**Wersja:** 0.4  
 **Data:** 13 listopada 2026  
 **Status:** roboczy  
 **Nazwa:** Pasovelo  
 **Autor:** Kacper Bobrowski
+
+Zatwierdzone decyzje: [`DECISIONS.md`](DECISIONS.md).
 
 ---
 
@@ -38,10 +40,11 @@ Kolejność rozwoju: **czasowniki → rzeczowniki i przymiotniki → ewentualnie
 | Poziomy CEFR | Przybliżane na podstawie częstotliwości + ręczne tagowanie. Oznaczane jako orientacyjne. | zatwierdzone |
 | Logowanie | Brak w MVP. Opcjonalne imię i postęp w localStorage. | zatwierdzone |
 | Baza danych | Brak runtime DB. JSON generowany w buildzie; SQLite lokalnie w pipeline. Później rozważamy Netlify Database (Postgres), Neon, Supabase lub Turso. | zatwierdzone |
+| Biblioteka UI | **shadcn/ui na Base UI** + Tailwind CSS 4. Komponenty kopiowane do `src/components/ui`, motyw przez CSS variables. | zatwierdzona |
 | SRS | FSRS (`ts-fsrs`). | propozycja |
 | Hosting | Do decyzji. Rozważamy Netlify (Free, commercial OK), Cloudflare Pages i Railway; Vercel Hobby odpada przy reklamach. **Na razie brak deploymentu.** | propozycja |
 | Monetyzacja | Donacje teraz, reklamy opcjonalnie później. Licencje danych muszą pozwalać na komercję. | zatwierdzone |
-| Testy | Teraz: CI code quality + PR title check. Później: walidacja danych, testy jednostkowe, E2E. | zatwierdzone |
+| Testy | Teraz: CI code quality + testy (Vitest) + PR title check. Później: walidacja danych i E2E. | zatwierdzone |
 | Poza MVP | Konta, płatności, aplikacja mobilna, rzeczowniki/przymiotniki, wiele języków. | zatwierdzone |
 
 ---
@@ -66,7 +69,8 @@ Zasada: **treść jest read-only i wersjonowana w repo**, a aplikacja nie potrze
 |---|---|
 | Framework | Next.js (App Router, najnowsza stabilna) |
 | Język | TypeScript |
-| Styl | Tailwind CSS |
+| Styl | Tailwind CSS 4 |
+| Komponenty UI | shadcn/ui na Base UI; kod w `src/components/ui`, motyw przez CSS variables |
 | Stan | React Context + reducer lub Zustand (decyzja implementacyjna) |
 | SRS | `ts-fsrs` |
 | Walidacja danych | Zod |
@@ -89,7 +93,9 @@ Zasada: **treść jest read-only i wersjonowana w repo**, a aplikacja nie potrze
       ustawienia/
       zrodla/
     components/
+      ui/            # shadcn/ui (Base UI)
     lib/
+      utils.ts       # cn() dla shadcn/ui
       srs/
       storage/
       quiz/
@@ -407,6 +413,8 @@ pnpm typecheck
 
 ### 8.2. Komponenty
 
+Bazowe komponenty UI pochodzą z **shadcn/ui (Base UI)** i są kopiowane do `src/components/ui`. Komponenty domenowe (quiz, odmiana, postęp) trzymamy w `src/components`.
+
 - `ExerciseCard`
 - `AnswerInput`
 - `SpanishKeyboard`
@@ -537,6 +545,7 @@ Czasy orientacyjne dla projektu solo, po godzinach. Mogą się zmienić.
 ### Faza 2 — MVP aplikacji (2–3 tygodnie)
 
 - Port UI z prototypu.
+- Inicjalizacja shadcn/ui (Base UI), motyw i pierwsze komponenty bazowe.
 - Tryb Forma + Paradygmat.
 - Filtry, statystyki, klawiatura hiszpańska.
 - localStorage + eksport/import.
@@ -626,12 +635,12 @@ Teraz:
 pnpm typecheck
 pnpm lint
 pnpm format
+pnpm test
 pnpm build
 ```
 
 Później:
 ```bash
-pnpm test
 pnpm data:validate
 ```
 
