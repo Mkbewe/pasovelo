@@ -17,8 +17,9 @@ See `README.md` and `docs/PLAN.md` for architecture and roadmap.
 
 ## Commands
 
-- `pnpm check:all` — typecheck, ESLint and Prettier; run once before finishing work
-- `pnpm test` — not configured yet; add Vitest when tests start
+- `pnpm check:all` — typecheck, ESLint, Prettier and Vitest; run once before finishing work
+- `pnpm test` — run Vitest once; use `pnpm test:watch` during development
+- `pnpm task` — create a branch from an issue on the Pasovelo GitHub Project
 - Commits follow Conventional Commits; subject at most 72 characters
 - Scope is optional; use a short area such as `ui`, `ci` or `docs` until issue numbers exist
 - When the user asks for a commit message, answer with one message only: the Conventional Commits header and, when the change set is large, a body with bullet points

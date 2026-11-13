@@ -12,11 +12,12 @@ Early stage. A working UI prototype is available at `/prototype.html`. The actua
 - TypeScript
 - Tailwind CSS 4
 - ESLint + Prettier
+- Vitest + Testing Library
 - pnpm
 
 ## Requirements
 
-- Node.js 20+
+- Node.js 22+
 - pnpm 10+
 
 ## Getting Started
@@ -41,13 +42,22 @@ Prototype: http://localhost:3000/prototype.html
 | `pnpm typecheck` | Run TypeScript checks |
 | `pnpm format` | Check formatting with Prettier |
 | `pnpm format:fix` | Format files with Prettier |
-| `pnpm check:all` | typecheck + lint + format |
+| `pnpm test` | Run the Vitest suite once |
+| `pnpm test:watch` | Run Vitest in watch mode |
+| `pnpm task` | Create a branch from an issue on the Pasovelo board |
+| `pnpm check:all` | typecheck + lint + format + test |
+
+## CI
+
+GitHub Actions runs code quality checks and tests on pushes and pull requests to `main`, and validates PR titles against Conventional Commits.
 
 ## Project Structure
 
 ```
 src/app/          # App Router
+src/              # Components, hooks and shared logic as the app grows
 public/           # Static assets, including prototype.html
+scripts/          # Project tooling
 docs/             # Project plan
 ```
 

@@ -44,6 +44,12 @@ const eslintConfig = defineConfig([
       'react/jsx-no-useless-fragment': 'error',
     },
   },
+  {
+    files: ['scripts/**/*.mjs'],
+    rules: {
+      'no-console': 'off',
+    },
+  },
   globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts']),
   eslintConfigPrettier,
 ]);
