@@ -1,0 +1,1472 @@
+<!doctype html>
+<html lang="pl" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trener Czasowników Hiszpańskich (A1–B2)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              brand: {
+                50: '#fff7ed',
+                100: '#ffedd5',
+                500: '#f97316',
+                600: '#ea580c',
+                700: '#c2410c',
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+      .shake {
+        animation: shake 0.35s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+      }
+      @keyframes shake {
+        10%,
+        90% {
+          transform: translate3d(-1px, 0, 0);
+        }
+        20%,
+        80% {
+          transform: translate3d(2px, 0, 0);
+        }
+        30%,
+        50%,
+        70% {
+          transform: translate3d(-4px, 0, 0);
+        }
+        40%,
+        60% {
+          transform: translate3d(4px, 0, 0);
+        }
+      }
+      .pop-in {
+        animation: popIn 0.2s ease-out forwards;
+      }
+      @keyframes popIn {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body
+    class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen transition-colors duration-200 flex flex-col"
+  >
+    <!-- Górny pasek nawigacyjny -->
+    <header
+      class="border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-20"
+    >
+      <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5">
+          <div
+            class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-rose-600 flex items-center justify-center text-white font-extrabold text-lg shadow-md"
+          >
+            ES
+          </div>
+          <div>
+            <h1 class="font-bold text-base sm:text-lg leading-tight">Trener Czasowników</h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400">
+              Twoja baza 129 czasowników (A1–B2)
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <!-- Statystyki mini -->
+          <div
+            class="hidden sm:flex items-center gap-3 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl text-xs font-semibold"
+          >
+            <span class="text-emerald-600 dark:text-emerald-400" title="Poprawne odpowiedzi"
+              >✓ <span id="stat-correct">0</span></span
+            >
+            <span class="text-rose-600 dark:text-rose-400" title="Błędne odpowiedzi"
+              >✗ <span id="stat-wrong">0</span></span
+            >
+            <span class="text-amber-600 dark:text-amber-400" title="Aktualna seria"
+              >🔥 <span id="stat-streak">0</span></span
+            >
+          </div>
+
+          <!-- Przycisk trybu powtórki błędów -->
+          <button
+            id="btn-review-mistakes"
+            onclick="toggleMistakesMode()"
+            class="hidden items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-rose-100 text-rose-700 dark:bg-rose-950/70 dark:text-rose-300 border border-rose-300 dark:border-rose-800 hover:bg-rose-200 dark:hover:bg-rose-900 transition"
+          >
+            <span>Powtórz błędne</span>
+            <span
+              id="mistakes-count"
+              class="bg-rose-600 text-white px-1.5 py-0.5 rounded-md text-[11px]"
+              >0</span
+            >
+          </button>
+
+          <!-- Przełącznik ustawień -->
+          <button
+            onclick="toggleSettings()"
+            class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition"
+            title="Filtry i ustawienia"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+              />
+            </svg>
+          </button>
+
+          <!-- Przełącznik motywu -->
+          <button
+            onclick="toggleTheme()"
+            class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition"
+            title="Zmień motyw"
+          >
+            <svg
+              id="icon-sun"
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-5 hidden dark:block"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+              />
+            </svg>
+            <svg
+              id="icon-moon"
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-5 block dark:hidden"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Główny kontener -->
+    <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-6 flex flex-col gap-5">
+      <!-- Panel filtrów i konfiguracji (rozwijany/widoczny) -->
+      <section
+        id="settings-panel"
+        class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm transition-all"
+      >
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            Konfiguracja ćwiczenia
+          </h2>
+          <span
+            id="pool-counter"
+            class="text-xs font-medium bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-lg text-slate-600 dark:text-slate-300"
+            >Pula: 129 czasowników</span
+          >
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Wybór czasów -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2"
+              >Czasy do ćwiczenia (wybierz min. 1):</label
+            >
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2" id="tense-filters">
+              <button
+                type="button"
+                data-tense="presente"
+                onclick="toggleTense('presente')"
+                class="tense-btn active flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold border transition"
+              >
+                <span>Presente de indicativo</span>
+                <span class="check-dot w-2 h-2 rounded-full bg-amber-500"></span>
+              </button>
+              <button
+                type="button"
+                data-tense="indefinido"
+                onclick="toggleTense('indefinido')"
+                class="tense-btn active flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold border transition"
+              >
+                <span>Pretérito indefinido</span>
+                <span class="check-dot w-2 h-2 rounded-full bg-amber-500"></span>
+              </button>
+              <button
+                type="button"
+                data-tense="perfecto"
+                onclick="toggleTense('perfecto')"
+                class="tense-btn active flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold border transition"
+              >
+                <span>Pretérito perfecto</span>
+                <span class="check-dot w-2 h-2 rounded-full bg-amber-500"></span>
+              </button>
+              <button
+                type="button"
+                data-tense="imperfecto"
+                onclick="toggleTense('imperfecto')"
+                class="tense-btn active flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold border transition"
+              >
+                <span>Pretérito imperfecto</span>
+                <span class="check-dot w-2 h-2 rounded-full bg-amber-500"></span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Wybór poziomów i opcji -->
+          <div class="flex flex-col justify-between gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2"
+                >Poziomy (z Twojej listy):</label
+              >
+              <div class="flex flex-wrap gap-2" id="level-filters">
+                <button
+                  type="button"
+                  data-level="A1"
+                  onclick="toggleLevel('A1')"
+                  class="level-btn px-3.5 py-1.5 rounded-xl text-xs font-bold border transition"
+                >
+                  A1
+                </button>
+                <button
+                  type="button"
+                  data-level="A2"
+                  onclick="toggleLevel('A2')"
+                  class="level-btn px-3.5 py-1.5 rounded-xl text-xs font-bold border transition"
+                >
+                  A2
+                </button>
+                <button
+                  type="button"
+                  data-level="B1"
+                  onclick="toggleLevel('B1')"
+                  class="level-btn px-3.5 py-1.5 rounded-xl text-xs font-bold border transition"
+                >
+                  B1
+                </button>
+                <button
+                  type="button"
+                  data-level="B2"
+                  onclick="toggleLevel('B2')"
+                  class="level-btn px-3.5 py-1.5 rounded-xl text-xs font-bold border transition"
+                >
+                  B2
+                </button>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-4 pt-1">
+              <label
+                class="inline-flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-700 dark:text-slate-300"
+              >
+                <input
+                  type="checkbox"
+                  id="opt-irregular-only"
+                  onchange="updatePoolAndNext()"
+                  class="rounded border-slate-300 text-amber-600 focus:ring-amber-500 w-4 h-4"
+                />
+                <span>Tylko nieregularne</span>
+              </label>
+
+              <label
+                class="inline-flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-700 dark:text-slate-300"
+              >
+                <input
+                  type="checkbox"
+                  id="opt-lenient-accents"
+                  checked
+                  class="rounded border-slate-300 text-amber-600 focus:ring-amber-500 w-4 h-4"
+                />
+                <span>Toleruj brak akcentów (ostrzeżenie)</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kategoria -->
+        <div
+          class="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+        >
+          <div class="flex items-center gap-2 flex-1">
+            <label
+              for="category-select"
+              class="text-xs font-semibold text-slate-600 dark:text-slate-400 whitespace-nowrap"
+              >Kategoria:</label
+            >
+            <select
+              id="category-select"
+              onchange="updatePoolAndNext()"
+              class="w-full sm:w-auto bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-amber-500"
+            >
+              <option value="ALL">Wszystkie kategorie (129)</option>
+            </select>
+          </div>
+
+          <div class="flex sm:hidden items-center gap-3 text-xs font-semibold pt-1">
+            <span class="text-emerald-600 dark:text-emerald-400"
+              >✓ <span id="stat-correct-mob">0</span></span
+            >
+            <span class="text-rose-600 dark:text-rose-400"
+              >✗ <span id="stat-wrong-mob">0</span></span
+            >
+            <span class="text-amber-600 dark:text-amber-400"
+              >🔥 <span id="stat-streak-mob">0</span></span
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- Karta główna zadania -->
+      <section
+        id="exercise-card"
+        class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 sm:p-8 shadow-lg flex flex-col gap-6 relative overflow-hidden"
+      >
+        <!-- Pasek trybu powtórki -->
+        <div
+          id="mistakes-banner"
+          class="hidden -mx-5 -mt-5 sm:-mx-8 sm:-mt-8 mb-1 bg-rose-600 text-white px-5 py-2 text-xs font-semibold flex items-center justify-between"
+        >
+          <span>Tryb powtórki błędów — ćwiczysz tylko czasowniki, w których pojawił się błąd.</span>
+          <button onclick="toggleMistakesMode()" class="underline hover:text-rose-100">
+            Wróć do wszystkich
+          </button>
+        </div>
+
+        <!-- Nagłówek pytania: Tagi czasu, poziomu i kategorii -->
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex flex-wrap items-center gap-2">
+            <span
+              id="badge-tense"
+              class="px-3 py-1 rounded-xl text-xs font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60"
+            >
+              Presente de indicativo
+            </span>
+            <span
+              id="badge-level"
+              class="px-2.5 py-1 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300"
+            >
+              A1
+            </span>
+            <span
+              id="badge-irregular"
+              class="hidden px-2.5 py-1 rounded-xl text-xs font-semibold bg-purple-100 text-purple-700 dark:bg-purple-950/70 dark:text-purple-300"
+            >
+              Nieregularny
+            </span>
+          </div>
+          <span id="badge-category" class="text-xs text-slate-400 dark:text-slate-500 font-medium">
+            Byt, stan i podstawy
+          </span>
+        </div>
+
+        <!-- Czasownik i tłumaczenie -->
+        <div class="text-center py-2">
+          <div class="inline-block">
+            <h2
+              id="verb-infinitive"
+              class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-1.5"
+            >
+              Tener
+            </h2>
+            <p
+              id="verb-meaning"
+              class="text-sm sm:text-base text-slate-500 dark:text-slate-400 font-medium"
+            >
+              mieć
+            </p>
+          </div>
+        </div>
+
+        <!-- Pole odpowiedzi z osobą -->
+        <div class="max-w-xl w-full mx-auto flex flex-col gap-3">
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+            <div
+              id="person-label"
+              class="px-4 py-3.5 rounded-2xl bg-slate-100 dark:bg-slate-800 font-bold text-slate-700 dark:text-slate-200 text-sm sm:text-base text-center sm:text-right sm:min-w-[155px] select-none border border-slate-200 dark:border-slate-700"
+            >
+              nosotros/as
+            </div>
+            <div class="relative flex-1">
+              <input
+                type="text"
+                id="answer-input"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                placeholder="Wpisz odmienioną formę..."
+                class="w-full px-4 py-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border-2 border-slate-200 dark:border-slate-700 focus:border-amber-500 dark:focus:border-amber-500 focus:outline-none text-base sm:text-lg font-semibold text-slate-900 dark:text-white transition"
+              />
+            </div>
+          </div>
+
+          <!-- Klawiatura znaków hiszpańskich -->
+          <div class="flex items-center justify-between gap-2 flex-wrap">
+            <div class="flex items-center gap-1.5">
+              <span class="text-[11px] text-slate-400 mr-1 hidden sm:inline">Znaki:</span>
+              <button
+                type="button"
+                onclick="insertChar('á')"
+                class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-sm font-bold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition"
+              >
+                á
+              </button>
+              <button
+                type="button"
+                onclick="insertChar('é')"
+                class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-sm font-bold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition"
+              >
+                é
+              </button>
+              <button
+                type="button"
+                onclick="insertChar('í')"
+                class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-sm font-bold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition"
+              >
+                í
+              </button>
+              <button
+                type="button"
+                onclick="insertChar('ó')"
+                class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-sm font-bold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition"
+              >
+                ó
+              </button>
+              <button
+                type="button"
+                onclick="insertChar('ú')"
+                class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-sm font-bold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition"
+              >
+                ú
+              </button>
+              <button
+                type="button"
+                onclick="insertChar('ñ')"
+                class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-sm font-bold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition"
+              >
+                ñ
+              </button>
+            </div>
+            <span
+              id="hint-note"
+              class="text-[11px] text-slate-400 dark:text-slate-500 italic"
+            ></span>
+          </div>
+
+          <!-- Przyciski akcji -->
+          <div class="flex items-center gap-3 pt-2">
+            <button
+              id="btn-submit"
+              onclick="handlePrimaryAction()"
+              class="flex-1 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold text-sm sm:text-base shadow-md shadow-orange-500/20 transition active:scale-[0.99]"
+            >
+              Sprawdź odpowiedź (Enter)
+            </button>
+            <button
+              id="btn-skip"
+              onclick="skipQuestion()"
+              class="py-3.5 px-4 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-semibold text-sm transition"
+              title="Pomiń to pytanie"
+            >
+              Pomiń
+            </button>
+          </div>
+        </div>
+
+        <!-- Informacja zwrotna po sprawdzeniu -->
+        <div id="feedback-box" class="hidden max-w-xl w-full mx-auto rounded-2xl p-4 border pop-in">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <p id="feedback-title" class="font-bold text-base"></p>
+              <p id="feedback-detail" class="text-sm mt-1"></p>
+            </div>
+            <button
+              onclick="toggleFullTable()"
+              class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/80 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-800 transition shrink-0"
+            >
+              Cała odmiana
+            </button>
+          </div>
+
+          <!-- Tabela pełnej odmiany dla aktualnego czasu -->
+          <div
+            id="full-table-container"
+            class="hidden mt-4 pt-3 border-t border-black/10 dark:border-white/10"
+          >
+            <p
+              class="text-xs font-bold uppercase tracking-wider opacity-70 mb-2"
+              id="full-table-header"
+            >
+              Odmiana w tym czasie:
+            </p>
+            <div id="full-table-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs">
+              <!-- Wypełniane dynamicznie -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Krótka ściąga z końcówek -->
+      <details
+        class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 text-xs text-slate-600 dark:text-slate-400"
+      >
+        <summary class="font-bold text-slate-800 dark:text-slate-200 cursor-pointer select-none">
+          Szybka ściąga z końcówek regularnych (kliknij, aby rozwinąć)
+        </summary>
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-3 pt-3 border-t border-slate-100 dark:border-slate-800"
+        >
+          <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/50">
+            <div class="font-bold text-amber-600 dark:text-amber-400 mb-1">Presente</div>
+            <div><b>-AR:</b> -o, -as, -a, -amos, -áis, -an</div>
+            <div><b>-ER:</b> -o, -es, -e, -emos, -éis, -en</div>
+            <div><b>-IR:</b> -o, -es, -e, -imos, -ís, -en</div>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/50">
+            <div class="font-bold text-amber-600 dark:text-amber-400 mb-1">
+              Pretérito indefinido
+            </div>
+            <div><b>-AR:</b> -é, -aste, -ó, -amos, -asteis, -aron</div>
+            <div><b>-ER/-IR:</b> -í, -iste, -ió, -imos, -isteis, -ieron</div>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/50">
+            <div class="font-bold text-amber-600 dark:text-amber-400 mb-1">Pretérito perfecto</div>
+            <div><b>haber:</b> he, has, ha, hemos, habéis, han</div>
+            <div><b>+ participio:</b> -ado (-ar) / -ido (-er/-ir)</div>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/50">
+            <div class="font-bold text-amber-600 dark:text-amber-400 mb-1">
+              Pretérito imperfecto
+            </div>
+            <div><b>-AR:</b> -aba, -abas, -aba, -ábamos, -abais, -aban</div>
+            <div><b>-ER/-IR:</b> -ía, -ías, -ía, -íamos, -íais, -ían</div>
+          </div>
+        </div>
+      </details>
+    </main>
+
+    <script>
+      // ==========================================
+      // 1. DANE CZASOWNIKÓW Z TWOJEJ LISTY
+      // ==========================================
+      const RAW_CSV = `A1;Byt, stan i podstawy;Ser;być (stałość, cecha, tożsamość)
+A1;Byt, stan i podstawy;Estar;być (stan, samopoczucie, lokalizacja)
+A1;Byt, stan i podstawy;Tener;mieć
+A1;Byt, stan i podstawy;Hacer;robić
+A1;Byt, stan i podstawy;Poder;móc, potrafić
+A1;Byt, stan i podstawy;Querer;chcieć, kochać
+A1;Byt, stan i podstawy;Deber;musieć, mieć obowiązek
+A1;Byt, stan i podstawy;Saber;wiedzieć, umieć
+A1;Byt, stan i podstawy;Conocer;znać (osobę, miejsce)
+A1;Tożsamość, rutyna i ciało;Llamarse;nazywać się
+A1;Tożsamość, rutyna i ciało;Ducharse;brać prysznic
+A1;Tożsamość, rutyna i ciało;Dormir;spać
+A1;Tożsamość, rutyna i ciało;Vivir;żyć, mieszkać
+A1;Tożsamość, rutyna i ciało;Trabajar;pracować
+A1;Komunikacja, nauka i zmysły;Hablar;mówić, rozmawiać
+A1;Komunikacja, nauka i zmysły;Decir;mówić, powiedzieć
+A1;Komunikacja, nauka i zmysły;Escuchar;słuchać
+A1;Komunikacja, nauka i zmysły;Escribir;pisać
+A1;Komunikacja, nauka i zmysły;Leer;czytać
+A1;Komunikacja, nauka i zmysły;Comprender;rozumieć
+A1;Komunikacja, nauka i zmysły;Entender;rozumieć
+A1;Komunikacja, nauka i zmysły;Estudiar;uczyć się, studiować
+A1;Komunikacja, nauka i zmysły;Aprender;uczyć się
+A1;Komunikacja, nauka i zmysły;Ver;widzieć, oglądać
+A1;Komunikacja, nauka i zmysły;Mirar;patrzeć
+A1;Komunikacja, nauka i zmysły;Llamar;dzwonić, nazywać
+A1;Ruch i przemieszczanie się;Ir;iść, jechać
+A1;Ruch i przemieszczanie się;Venir;przychodzić, przyjeżdżać
+A1;Ruch i przemieszczanie się;Salir;wychodzić, wyjeżdżać
+A1;Ruch i przemieszczanie się;Llegar;przychodzić, docierać
+A1;Ruch i przemieszczanie się;Pasar;przechodzić, spędzać czas
+A1;Jedzenie, picie i zakupy;Comer;jeść
+A1;Jedzenie, picie i zakupy;Beber;pić
+A1;Jedzenie, picie i zakupy;Tomar;brać, pić, zażywać
+A1;Jedzenie, picie i zakupy;Comprar;kupować
+A1;Jedzenie, picie i zakupy;Vender;sprzedawać
+A1;Jedzenie, picie i zakupy;Pagar;płacić
+A1;Działania codzienne i domowe;Dar;dawać
+A1;Działania codzienne i domowe;Poner;kłaść, układać, włączać
+A1;Działania codzienne i domowe;Buscar;szukać
+A1;Działania codzienne i domowe;Encontrar;znaleźć
+A1;Działania codzienne i domowe;Necesitar;potrzebować
+A1;Działania codzienne i domowe;Pensar;myśleć
+A1;Działania codzienne i domowe;Gustar;podobać się, lubić
+A1;Działania codzienne i domowe;Abrir;otwierać
+A1;Działania codzienne i domowe;Cerrar;zamykać
+A1;Działania codzienne i domowe;Jugar;grać (w grę / sport)
+A2;Codzienna rutyna i higiena;Levantarse;wstawać
+A2;Codzienna rutyna i higiena;Acostarse;kłaść się spać
+A2;Codzienna rutyna i higiena;Vestirse;ubierać się
+A2;Codzienna rutyna i higiena;Descansar;odpoczywać
+A2;Czas wolny, finanse i zakupy;Quedar;umawiać się (ze znajomymi)
+A2;Czas wolny, finanse i zakupy;Gastar;wydawać (pieniądze)
+A2;Czas wolny, finanse i zakupy;Ganar;wygrywać, zarabiać
+A2;Czas wolny, finanse i zakupy;Cambiar;zmieniać, wymieniać
+A2;Czas wolny, finanse i zakupy;Usar;używać
+A2;Podróże, ruch i transport;Conducir;prowadzić samochód
+A2;Podróże, ruch i transport;Llevar;nosić, zabierać
+A2;Podróże, ruch i transport;Traer;przynosić
+A2;Podróże, ruch i transport;Subir;wsiadać, wchodzić
+A2;Podróże, ruch i transport;Parar;zatrzymywać się
+A2;Podróże, ruch i transport;Perder;stracić, zgubić
+A2;Umysł, emocje i pamięć;Creer;wierzyć, uważać
+A2;Umysł, emocje i pamięć;Esperar;czekać
+A2;Umysł, emocje i pamięć;Sentir;czuć
+A2;Umysł, emocje i pamięć;Recordar;pamiętać
+A2;Umysł, emocje i pamięć;Olvidar;zapominać
+A2;Relacje i interakcje;Ayudar;pomagać
+A2;Relacje i interakcje;Dejar;zostawiać
+A2;Relacje i interakcje;Contar;liczyć, opowiadać
+A2;Relacje i interakcje;Conversar;rozmawiać
+A2;Relacje i interakcje;Recomendar;polecać
+A2;Relacje i interakcje;Quitar;zabierać
+A2;Praktyczne i codzienne;Empezar;zaczynać
+A2;Praktyczne i codzienne;Comenzar;zaczynać
+A2;Praktyczne i codzienne;Terminar;kończyć
+A2;Praktyczne i codzienne;Enviar;wysyłać
+A2;Praktyczne i codzienne;Apagar;wyłączać
+A2;Praktyczne i codzienne;Encender;włączać
+A2;Praktyczne i codzienne;Mantener;utrzymywać
+A2;Praktyczne i codzienne;Servir;służyć
+A2;Praktyczne i codzienne;Mandar;rozkazywać
+A2;Praktyczne i codzienne;Cumplir;spełniać
+A2;Praktyczne i codzienne;Aparecer;pojawiać się
+A2;Praktyczne i codzienne;Curar;leczyć
+A2;Praktyczne i codzienne;Anotar;notować
+A2;Praktyczne i codzienne;Aumentar;zwiększać
+A2;Praktyczne i codzienne;Aprobar;zdać
+A2;Praktyczne i codzienne;Suspender;oblać
+A2;Praktyczne i codzienne;Llover;padać (deszcz)
+B1;Opinie, emocje i relacje;Disfrutar;cieszyć się
+B1;Opinie, emocje i relacje;Depender;zależeć
+B1;Opinie, emocje i relacje;Dudar;wątpić
+B1;Opinie, emocje i relacje;Aconsejar;doradzać
+B1;Opinie, emocje i relacje;Molestar;przeszkadzać
+B1;Opinie, emocje i relacje;Parecerse;być podobnym
+B1;Opinie, emocje i relacje;Quejarse;narzekać
+B1;Opinie, emocje i relacje;Emocionar;wzruszać
+B1;Opinie, emocje i relacje;Cotillear;plotkować
+B1;Opinie, emocje i relacje;Tratar;traktować
+B1;Działanie, cele i problemy;Conseguir;osiągnąć
+B1;Działanie, cele i problemy;Lograr;zdobyć
+B1;Działanie, cele i problemy;Resolver;rozwiązywać
+B1;Działanie, cele i problemy;Dirigir;kierować
+B1;Działanie, cele i problemy;Diseñar;projektować
+B1;Działanie, cele i problemy;Realizar;realizować
+B1;Działanie, cele i problemy;Actuar;działać
+B1;Działanie, cele i problemy;Encargarse;zająć się
+B1;Działanie, cele i problemy;Luchar;walczyć
+B1;Zmiany, stan i procesy;Reducir;zmniejszać
+B1;Zmiany, stan i procesy;Disminuir;redukować
+B1;Zmiany, stan i procesy;Ampliar;rozszerzać
+B1;Zmiany, stan i procesy;Prevenir;zapobiegać
+B1;Zmiany, stan i procesy;Avanzar;posuwać się
+B1;Zmiany, stan i procesy;Frenar;hamować
+B1;Zmiany, stan i procesy;Percibir;dostrzegać
+B1;Zmiany, stan i procesy;Flotar;unosić się
+B1;Zmiany, stan i procesy;Acabar con;kończyć z
+B1;Zmiany, stan i procesy;Rodear;otaczać
+B1;Zmiany, stan i procesy;Comentar;komentować
+B1;Zmiany, stan i procesy;Alejar;odsuwać
+B1;Zmiany, stan i procesy;Impactar;wywierać wrażenie
+B1;Zmiany, stan i procesy;Trasladarse;przeprowadzać się
+B1;Zmiany, stan i procesy;Abandonar;opuszczać
+B2;Zaawansowane i specjalistyczne;Declarar;zeznawać
+B2;Zaawansowane i specjalistyczne;Oponerse;sprzeciwiać się
+B2;Zaawansowane i specjalistyczne;Persuadir;przekonywać
+B2;Zaawansowane i specjalistyczne;Coser;szyć
+B2;Zaawansowane i specjalistyczne;Cursar;uczęszczać na kurs`;
+
+      // ==========================================
+      // 2. SILNIK ODMIANY CZASOWNIKÓW HISZPAŃSKICH
+      // ==========================================
+      const PERSONS = [
+        { key: 0, label: 'yo', pronoun: 'me' },
+        { key: 1, label: 'tú', pronoun: 'te' },
+        { key: 2, label: 'él / ella / usted', pronoun: 'se' },
+        { key: 3, label: 'nosotros/as', pronoun: 'nos' },
+        { key: 4, label: 'vosotros/as', pronoun: 'os' },
+        { key: 5, label: 'ellos / ellas / ustedes', pronoun: 'se' },
+      ];
+
+      const TENSE_NAMES = {
+        presente: 'Presente de indicativo',
+        indefinido: 'Pretérito indefinido',
+        perfecto: 'Pretérito perfecto',
+        imperfecto: 'Pretérito imperfecto',
+      };
+
+      const HABER_PRESENTE = ['he', 'has', 'ha', 'hemos', 'habéis', 'han'];
+
+      // Pełne tabele dla czasowników mocno nieregularnych
+      const FULL_IRREGULARS = {
+        ser: {
+          presente: ['soy', 'eres', 'es', 'somos', 'sois', 'son'],
+          indefinido: ['fui', 'fuiste', 'fue', 'fuimos', 'fuisteis', 'fueron'],
+          imperfecto: ['era', 'eras', 'era', 'éramos', 'erais', 'eran'],
+          participio: 'sido',
+        },
+        estar: {
+          presente: ['estoy', 'estás', 'está', 'estamos', 'estáis', 'están'],
+          indefinido: ['estuve', 'estuviste', 'estuvo', 'estuvimos', 'estuvisteis', 'estuvieron'],
+          participio: 'estado',
+        },
+        ir: {
+          presente: ['voy', 'vas', 'va', 'vamos', 'vais', 'van'],
+          indefinido: ['fui', 'fuiste', 'fue', 'fuimos', 'fuisteis', 'fueron'],
+          imperfecto: ['iba', 'ibas', 'iba', 'íbamos', 'ibais', 'iban'],
+          participio: 'ido',
+        },
+        ver: {
+          presente: ['veo', 'ves', 've', 'vemos', 'veis', 'ven'],
+          indefinido: ['vi', 'viste', 'vio', 'vimos', 'visteis', 'vieron'],
+          imperfecto: ['veía', 'veías', 'veía', 'veíamos', 'veíais', 'veían'],
+          participio: 'visto',
+        },
+        dar: {
+          presente: ['doy', 'das', 'da', 'damos', 'dais', 'dan'],
+          indefinido: ['di', 'diste', 'dio', 'dimos', 'disteis', 'dieron'],
+          participio: 'dado',
+        },
+        tener: {
+          presente: ['tengo', 'tienes', 'tiene', 'tenemos', 'tenéis', 'tienen'],
+          indefinido: ['tuve', 'tuviste', 'tuvo', 'tuvimos', 'tuvisteis', 'tuvieron'],
+          participio: 'tenido',
+        },
+        mantener: {
+          presente: ['mantengo', 'mantienes', 'mantiene', 'mantenemos', 'mantenéis', 'mantienen'],
+          indefinido: [
+            'mantuve',
+            'mantuviste',
+            'mantuvo',
+            'mantuvimos',
+            'mantuvisteis',
+            'mantuvieron',
+          ],
+          participio: 'mantenido',
+        },
+        hacer: {
+          presente: ['hago', 'haces', 'hace', 'hacemos', 'hacéis', 'hacen'],
+          indefinido: ['hice', 'hiciste', 'hizo', 'hicimos', 'hicisteis', 'hicieron'],
+          participio: 'hecho',
+        },
+        poder: {
+          presente: ['puedo', 'puedes', 'puede', 'podemos', 'podéis', 'pueden'],
+          indefinido: ['pude', 'pudiste', 'pudo', 'pudimos', 'pudisteis', 'pudieron'],
+          participio: 'podido',
+        },
+        querer: {
+          presente: ['quiero', 'quieres', 'quiere', 'queremos', 'queréis', 'quieren'],
+          indefinido: ['quise', 'quisiste', 'quiso', 'quisimos', 'quisisteis', 'quisieron'],
+          participio: 'querido',
+        },
+        saber: {
+          presente: ['sé', 'sabes', 'sabe', 'sabemos', 'sabéis', 'saben'],
+          indefinido: ['supe', 'supiste', 'supo', 'supimos', 'supisteis', 'supieron'],
+          participio: 'sabido',
+        },
+        poner: {
+          presente: ['pongo', 'pones', 'pone', 'ponemos', 'ponéis', 'ponen'],
+          indefinido: ['puse', 'pusiste', 'puso', 'pusimos', 'pusisteis', 'pusieron'],
+          participio: 'puesto',
+        },
+        oponer: {
+          presente: ['opongo', 'opones', 'opone', 'oponemos', 'oponéis', 'oponen'],
+          indefinido: ['opuse', 'opusiste', 'opuso', 'opusimos', 'opusisteis', 'opusieron'],
+          participio: 'opuesto',
+        },
+        decir: {
+          presente: ['digo', 'dices', 'dice', 'decimos', 'decís', 'dicen'],
+          indefinido: ['dije', 'dijiste', 'dijo', 'dijimos', 'dijisteis', 'dijeron'],
+          participio: 'dicho',
+        },
+        venir: {
+          presente: ['vengo', 'vienes', 'viene', 'venimos', 'venís', 'vienen'],
+          indefinido: ['vine', 'viniste', 'vino', 'vinimos', 'vinisteis', 'vinieron'],
+          participio: 'venido',
+        },
+        prevenir: {
+          presente: ['prevengo', 'previenes', 'previene', 'prevenimos', 'prevenís', 'previenen'],
+          indefinido: [
+            'previne',
+            'previniste',
+            'previno',
+            'previnimos',
+            'previnisteis',
+            'previnieron',
+          ],
+          participio: 'prevenido',
+        },
+        salir: {
+          presente: ['salgo', 'sales', 'sale', 'salimos', 'salís', 'salen'],
+          participio: 'salido',
+        },
+        traer: {
+          presente: ['traigo', 'traes', 'trae', 'traemos', 'traéis', 'traen'],
+          indefinido: ['traje', 'trajiste', 'trajo', 'trajimos', 'trajisteis', 'trajeron'],
+          participio: 'traído',
+        },
+        conducir: {
+          presente: ['conduzco', 'conduces', 'conduce', 'conducimos', 'conducís', 'conducen'],
+          indefinido: [
+            'conduje',
+            'condujiste',
+            'condujo',
+            'condujimos',
+            'condujisteis',
+            'condujeron',
+          ],
+          participio: 'conducido',
+        },
+        conocer: {
+          presente: ['conozco', 'conoces', 'conoce', 'conocemos', 'conocéis', 'conocen'],
+        },
+        aparecer: {
+          presente: ['aparezco', 'apareces', 'aparece', 'aparecemos', 'aparecéis', 'aparecen'],
+        },
+        parecer: {
+          presente: ['parezco', 'pareces', 'parece', 'parecemos', 'parecéis', 'parecen'],
+        },
+        escribir: {
+          participio: 'escrito',
+        },
+        abrir: {
+          participio: 'abierto',
+        },
+        resolver: {
+          presente: ['resuelvo', 'resuelves', 'resuelve', 'resolvemos', 'resolvéis', 'resuelven'],
+          participio: 'resuelto',
+        },
+        leer: {
+          indefinido: ['leí', 'leíste', 'leyó', 'leímos', 'leísteis', 'leyeron'],
+          participio: 'leído',
+        },
+        creer: {
+          indefinido: ['creí', 'creíste', 'creyó', 'creímos', 'creísteis', 'creyeron'],
+          participio: 'creído',
+        },
+        disminuir: {
+          presente: [
+            'disminuyo',
+            'disminuyes',
+            'disminuye',
+            'disminuimos',
+            'disminuís',
+            'disminuyen',
+          ],
+          indefinido: [
+            'disminuí',
+            'disminuiste',
+            'disminuyó',
+            'disminuimos',
+            'disminuisteis',
+            'disminuyeron',
+          ],
+        },
+      };
+
+      // Czasowniki oboczne w Presente (oraz e->i / o->u w 3. os. Indefinido dla -ir)
+      const STEM_CHANGES = {
+        dormir: { pres: ['o', 'ue'], indef3: ['o', 'u'] },
+        entender: { pres: ['e', 'ie'] },
+        encontrar: { pres: ['o', 'ue'] },
+        pensar: { pres: ['e', 'ie'] },
+        cerrar: { pres: ['e', 'ie'] },
+        jugar: { pres: ['u', 'ue'] },
+        acostar: { pres: ['o', 'ue'] },
+        vestir: { pres: ['e', 'i'], indef3: ['e', 'i'] },
+        perder: { pres: ['e', 'ie'] },
+        sentir: { pres: ['e', 'ie'], indef3: ['e', 'i'] },
+        recordar: { pres: ['o', 'ue'] },
+        contar: { pres: ['o', 'ue'] },
+        recomendar: { pres: ['e', 'ie'] },
+        empezar: { pres: ['e', 'ie'] },
+        comenzar: { pres: ['e', 'ie'] },
+        encender: { pres: ['e', 'ie'] },
+        servir: { pres: ['e', 'i'], indef3: ['e', 'i'] },
+        aprobar: { pres: ['o', 'ue'] },
+        llover: { pres: ['o', 'ue'] },
+        conseguir: { pres: ['e', 'i'], indef3: ['e', 'i'], yoPres: 'consigo' },
+        enviar: { presAccent: 'í' },
+        ampliar: { presAccent: 'í' },
+        actuar: { presAccent: 'ú' },
+      };
+
+      function replaceLastVowel(stem, fromVowel, toVowel) {
+        const idx = stem.lastIndexOf(fromVowel);
+        if (idx === -1) return stem;
+        return stem.substring(0, idx) + toVowel + stem.substring(idx + fromVowel.length);
+      }
+
+      function conjugateBaseVerb(baseInf, tense) {
+        const irreg = FULL_IRREGULARS[baseInf] || {};
+        const stemChange = STEM_CHANGES[baseInf];
+        const type = baseInf.slice(-2); // ar, er, ir
+        const stem = baseInf.slice(0, -2);
+
+        // 1. PRESENTE
+        if (tense === 'presente') {
+          if (irreg.presente) return [...irreg.presente];
+
+          const endings = {
+            ar: ['o', 'as', 'a', 'amos', 'áis', 'an'],
+            er: ['o', 'es', 'e', 'emos', 'éis', 'en'],
+            ir: ['o', 'es', 'e', 'imos', 'ís', 'en'],
+          }[type];
+
+          return endings.map((end, idx) => {
+            let currentStem = stem;
+            const isBoot = idx === 0 || idx === 1 || idx === 2 || idx === 5;
+
+            if (isBoot && stemChange) {
+              if (stemChange.pres) {
+                currentStem = replaceLastVowel(currentStem, stemChange.pres[0], stemChange.pres[1]);
+              } else if (stemChange.presAccent === 'í') {
+                currentStem = replaceLastVowel(currentStem, 'i', 'í');
+              } else if (stemChange.presAccent === 'ú') {
+                currentStem = replaceLastVowel(currentStem, 'u', 'ú');
+              }
+            }
+
+            // Ortografia dla 1. os. (yo)
+            if (idx === 0) {
+              if (stemChange && stemChange.yoPres) return stemChange.yoPres;
+              if (baseInf.endsWith('gir')) return currentStem.slice(0, -1) + 'jo'; // dirigir -> dirijo
+              if (baseInf.endsWith('guir')) return currentStem.slice(0, -2) + 'go'; // conseguir -> consigo
+              if (baseInf.endsWith('cer') && !['hacer', 'cocer', 'mecer'].includes(baseInf)) {
+                // reduco -> reduzco (gdy przed cer jest samogłoska)
+                const beforeCer = baseInf.slice(-4, -3);
+                if ('aeiou'.includes(beforeCer)) return currentStem.slice(0, -1) + 'zco';
+              }
+            }
+
+            return currentStem + end;
+          });
+        }
+
+        // 2. INDEFINIDO
+        if (tense === 'indefinido') {
+          if (irreg.indefinido) return [...irreg.indefinido];
+
+          const endings =
+            type === 'ar'
+              ? ['é', 'aste', 'ó', 'amos', 'asteis', 'aron']
+              : ['í', 'iste', 'ió', 'imos', 'isteis', 'ieron'];
+
+          return endings.map((end, idx) => {
+            let currentStem = stem;
+
+            // Zmiany ortograficzne w 1. osobie (-car, -gar, -zar)
+            if (idx === 0 && type === 'ar') {
+              if (baseInf.endsWith('car')) currentStem = currentStem.slice(0, -1) + 'qu';
+              else if (baseInf.endsWith('gar')) currentStem = currentStem.slice(0, -1) + 'gu';
+              else if (baseInf.endsWith('zar')) currentStem = currentStem.slice(0, -1) + 'c';
+            }
+
+            // Oboczność 3. osoby (él/ellos) dla -ir (dormir -> durmió, vestir -> vistió, sentir -> sintió)
+            if ((idx === 2 || idx === 5) && stemChange && stemChange.indef3) {
+              currentStem = replaceLastVowel(
+                currentStem,
+                stemChange.indef3[0],
+                stemChange.indef3[1]
+              );
+            }
+
+            return currentStem + end;
+          });
+        }
+
+        // 3. IMPERFECTO
+        if (tense === 'imperfecto') {
+          if (irreg.imperfecto) return [...irreg.imperfecto];
+          const endings =
+            type === 'ar'
+              ? ['aba', 'abas', 'aba', 'ábamos', 'abais', 'aban']
+              : ['ía', 'ías', 'ía', 'íamos', 'íais', 'ían'];
+          return endings.map(end => stem + end);
+        }
+
+        // 4. PERFECTO
+        if (tense === 'perfecto') {
+          const participio = irreg.participio || (type === 'ar' ? stem + 'ado' : stem + 'ido');
+          return HABER_PRESENTE.map(aux => `${aux} ${participio}`);
+        }
+
+        return [];
+      }
+
+      function conjugateFullVerb(verbObj, tense) {
+        const raw = verbObj.infinitive.toLowerCase(); // np. "llamarse", "acabar con", "tener"
+        const parts = raw.split(' ');
+        const mainWord = parts[0];
+        const suffixRest = parts.length > 1 ? ' ' + parts.slice(1).join(' ') : '';
+
+        const isReflexive = mainWord.endsWith('se') && mainWord !== 'coser';
+        const baseInf = isReflexive ? mainWord.slice(0, -2) : mainWord;
+
+        const forms = conjugateBaseVerb(baseInf, tense);
+
+        return forms.map((form, idx) => {
+          const prefix = isReflexive ? PERSONS[idx].pronoun + ' ' : '';
+          return `${prefix}${form}${suffixRest}`;
+        });
+      }
+
+      function checkIfIrregular(verbObj) {
+        const raw = verbObj.infinitive.toLowerCase().split(' ')[0];
+        const base = raw.endsWith('se') && raw !== 'coser' ? raw.slice(0, -2) : raw;
+        if (FULL_IRREGULARS[base] || STEM_CHANGES[base]) return true;
+        if (
+          base.endsWith('car') ||
+          base.endsWith('gar') ||
+          base.endsWith('zar') ||
+          base.endsWith('gir') ||
+          base.endsWith('guir') ||
+          base.endsWith('cer')
+        ) {
+          return true;
+        }
+        return false;
+      }
+
+      // Parsowanie CSV do tablicy obiektów
+      const ALL_VERBS = RAW_CSV.trim()
+        .split('\n')
+        .map((line, index) => {
+          const [level, category, infinitive, meaning] = line.split(';');
+          const obj = {
+            id: index,
+            level: level.trim(),
+            category: category.trim(),
+            infinitive: infinitive.trim(),
+            meaning: meaning.trim(),
+            isIrregular: false,
+          };
+          obj.isIrregular = checkIfIrregular(obj);
+          return obj;
+        });
+
+      // ==========================================
+      // 3. STAN APLIKACJI I LOGIKA QUIZÓW
+      // ==========================================
+      let state = {
+        selectedTenses: new Set(['presente', 'indefinido', 'perfecto', 'imperfecto']),
+        selectedLevels: new Set(['A1', 'A2', 'B1', 'B2']),
+        selectedCategory: 'ALL',
+        irregularOnly: false,
+        filteredPool: [...ALL_VERBS],
+        mistakesQueue: [],
+        mistakesMode: false,
+        currentQuestion: null,
+        answered: false,
+        stats: {
+          correct: 0,
+          wrong: 0,
+          streak: 0,
+        },
+      };
+
+      function initApp() {
+        // Wypełnij dropdown kategorii
+        const categories = [...new Set(ALL_VERBS.map(v => v.category))];
+        const catSelect = document.getElementById('category-select');
+        categories.forEach(cat => {
+          const count = ALL_VERBS.filter(v => v.category === cat).length;
+          const opt = document.createElement('option');
+          opt.value = cat;
+          opt.textContent = `${cat} (${count})`;
+          catSelect.appendChild(opt);
+        });
+
+        syncFilterStyles();
+        updatePool();
+        nextQuestion();
+
+        // Obsługa klawisza Enter
+        document.getElementById('answer-input').addEventListener('keydown', e => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            handlePrimaryAction();
+          }
+        });
+      }
+
+      function syncFilterStyles() {
+        // Czasy
+        document.querySelectorAll('.tense-btn').forEach(btn => {
+          const t = btn.dataset.tense;
+          const active = state.selectedTenses.has(t);
+          if (active) {
+            btn.className =
+              'tense-btn active flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold border transition bg-amber-50 dark:bg-amber-950/40 border-amber-400 dark:border-amber-600 text-amber-900 dark:text-amber-200';
+            btn.querySelector('.check-dot').classList.remove('opacity-20');
+          } else {
+            btn.className =
+              'tense-btn flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold border transition bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400';
+            btn.querySelector('.check-dot').classList.add('opacity-20');
+          }
+        });
+
+        // Poziomy
+        document.querySelectorAll('.level-btn').forEach(btn => {
+          const l = btn.dataset.level;
+          const active = state.selectedLevels.has(l);
+          if (active) {
+            btn.className =
+              'level-btn px-3.5 py-1.5 rounded-xl text-xs font-bold border transition bg-slate-900 text-white dark:bg-amber-500 dark:text-slate-950 border-slate-900 dark:border-amber-500';
+          } else {
+            btn.className =
+              'level-btn px-3.5 py-1.5 rounded-xl text-xs font-bold border transition bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400';
+          }
+        });
+      }
+
+      function toggleTense(tense) {
+        if (state.selectedTenses.has(tense)) {
+          if (state.selectedTenses.size === 1) return; // Min. 1 czas
+          state.selectedTenses.delete(tense);
+        } else {
+          state.selectedTenses.add(tense);
+        }
+        syncFilterStyles();
+        nextQuestion();
+      }
+
+      function toggleLevel(level) {
+        if (state.selectedLevels.has(level)) {
+          if (state.selectedLevels.size === 1) return; // Min. 1 poziom
+          state.selectedLevels.delete(level);
+        } else {
+          state.selectedLevels.add(level);
+        }
+        syncFilterStyles();
+        updatePoolAndNext();
+      }
+
+      function updatePool() {
+        const cat = document.getElementById('category-select').value;
+        const irregOnly = document.getElementById('opt-irregular-only').checked;
+
+        state.filteredPool = ALL_VERBS.filter(v => {
+          if (!state.selectedLevels.has(v.level)) return false;
+          if (cat !== 'ALL' && v.category !== cat) return false;
+          if (irregOnly && !v.isIrregular) return false;
+          return true;
+        });
+
+        // Awaryjnie jeśli kombinacja filtrów daje 0 wyników
+        if (state.filteredPool.length === 0) {
+          state.filteredPool = ALL_VERBS.filter(v => state.selectedLevels.has(v.level));
+        }
+
+        document.getElementById('pool-counter').textContent =
+          `Pula: ${state.filteredPool.length} czasowników`;
+      }
+
+      function updatePoolAndNext() {
+        updatePool();
+        nextQuestion();
+      }
+
+      function nextQuestion() {
+        state.answered = false;
+        const input = document.getElementById('answer-input');
+        input.value = '';
+        input.disabled = false;
+        input.className =
+          'w-full px-4 py-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border-2 border-slate-200 dark:border-slate-700 focus:border-amber-500 dark:focus:border-amber-500 focus:outline-none text-base sm:text-lg font-semibold text-slate-900 dark:text-white transition';
+
+        document.getElementById('feedback-box').classList.add('hidden');
+        document.getElementById('full-table-container').classList.add('hidden');
+        document.getElementById('btn-submit').textContent = 'Sprawdź odpowiedź (Enter)';
+
+        let verb, tense, personIdx;
+
+        if (state.mistakesMode && state.mistakesQueue.length > 0) {
+          const item = state.mistakesQueue[0];
+          verb = item.verb;
+          tense = item.tense;
+          personIdx = item.personIdx;
+        } else {
+          if (state.mistakesMode && state.mistakesQueue.length === 0) {
+            toggleMistakesMode(false);
+          }
+          const pool = state.filteredPool;
+          verb = pool[Math.floor(Math.random() * pool.length)];
+
+          const tensesArr = Array.from(state.selectedTenses);
+          tense = tensesArr[Math.floor(Math.random() * tensesArr.length)];
+
+          // Czasowniki bezosobowe / 3-osobowe jak llover czy gustar
+          const infLower = verb.infinitive.toLowerCase();
+          if (infLower === 'llover') {
+            personIdx = 2; // tylko 3. os. l.poj. (llueve)
+          } else if (infLower === 'gustar') {
+            personIdx = Math.random() < 0.7 ? 2 : 5; // najczęściej gusta / gustan
+          } else {
+            personIdx = Math.floor(Math.random() * 6);
+          }
+        }
+
+        const allForms = conjugateFullVerb(verb, tense);
+        state.currentQuestion = {
+          verb,
+          tense,
+          personIdx,
+          expected: allForms[personIdx],
+          allForms,
+        };
+
+        // Aktualizacja UI karty
+        document.getElementById('badge-tense').textContent = TENSE_NAMES[tense];
+        document.getElementById('badge-level').textContent = verb.level;
+        document.getElementById('badge-category').textContent = verb.category;
+
+        const irregBadge = document.getElementById('badge-irregular');
+        if (verb.isIrregular) irregBadge.classList.remove('hidden');
+        else irregBadge.classList.add('hidden');
+
+        document.getElementById('verb-infinitive').textContent = verb.infinitive;
+        document.getElementById('verb-meaning').textContent = verb.meaning;
+        document.getElementById('person-label').textContent = PERSONS[personIdx].label;
+
+        const hintEl = document.getElementById('hint-note');
+        if (
+          verb.infinitive.toLowerCase().endsWith('se') &&
+          verb.infinitive.toLowerCase() !== 'coser'
+        ) {
+          hintEl.textContent = 'Pamiętaj o zaimku zwrotnym (me/te/se...)';
+        } else if (verb.infinitive.toLowerCase() === 'llover') {
+          hintEl.textContent = 'Czasownik pogodowy (3. osoba)';
+        } else {
+          hintEl.textContent = '';
+        }
+
+        input.focus();
+      }
+
+      function stripAccents(str) {
+        return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      }
+
+      function handlePrimaryAction() {
+        if (!state.answered) {
+          checkAnswer();
+        } else {
+          nextQuestion();
+        }
+      }
+
+      function checkAnswer() {
+        const input = document.getElementById('answer-input');
+        const userRaw = input.value.trim().toLowerCase().replace(/\s+/g, ' ');
+        if (!userRaw) {
+          input.focus();
+          return;
+        }
+
+        state.answered = true;
+        const { verb, tense, personIdx, expected, allForms } = state.currentQuestion;
+        const lenient = document.getElementById('opt-lenient-accents').checked;
+
+        const exactMatch = userRaw === expected;
+        const accentlessMatch =
+          !exactMatch && lenient && stripAccents(userRaw) === stripAccents(expected);
+        const isCorrect = exactMatch || accentlessMatch;
+
+        const feedbackBox = document.getElementById('feedback-box');
+        const feedbackTitle = document.getElementById('feedback-title');
+        const feedbackDetail = document.getElementById('feedback-detail');
+
+        feedbackBox.classList.remove('hidden');
+
+        if (isCorrect) {
+          state.stats.correct++;
+          state.stats.streak++;
+
+          input.classList.remove('border-slate-200', 'dark:border-slate-700');
+          input.classList.add('border-emerald-500', 'bg-emerald-50/40', 'dark:bg-emerald-950/20');
+
+          feedbackBox.className =
+            'max-w-xl w-full mx-auto rounded-2xl p-4 border pop-in bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200';
+
+          if (exactMatch) {
+            feedbackTitle.textContent = 'Świetnie! Bezbłędnie.';
+            feedbackDetail.innerHTML = `Poprawna forma: <strong class="font-extrabold">${expected}</strong>`;
+          } else {
+            feedbackTitle.textContent = 'Dobrze! (Uwaga na akcent)';
+            feedbackDetail.innerHTML = `Uznałem odpowiedź, ale poprawny zapis z akcentem to: <strong class="font-extrabold underline">${expected}</strong>`;
+          }
+
+          // Jeśli tryb błędów, usuń z kolejki
+          if (state.mistakesMode && state.mistakesQueue.length > 0) {
+            state.mistakesQueue.shift();
+            updateMistakesUI();
+          }
+        } else {
+          state.stats.wrong++;
+          state.stats.streak = 0;
+
+          input.classList.remove('border-slate-200', 'dark:border-slate-700');
+          input.classList.add('border-rose-500', 'bg-rose-50/40', 'dark:bg-rose-950/20', 'shake');
+
+          feedbackBox.className =
+            'max-w-xl w-full mx-auto rounded-2xl p-4 border pop-in bg-rose-50 dark:bg-rose-950/30 border-rose-200 dark:border-rose-800 text-rose-900 dark:text-rose-200';
+          feedbackTitle.textContent = 'Nie tym razem!';
+          feedbackDetail.innerHTML = `Poprawna forma dla <b>${PERSONS[personIdx].label}</b> to: <strong class="font-extrabold text-base underline ml-1">${expected}</strong>`;
+
+          // Dodaj do kolejki powtórek błędów (jeśli jeszcze tam nie ma)
+          const alreadyInQueue = state.mistakesQueue.some(
+            m => m.verb.id === verb.id && m.tense === tense && m.personIdx === personIdx
+          );
+          if (!alreadyInQueue) {
+            state.mistakesQueue.push({ verb, tense, personIdx });
+            updateMistakesUI();
+          } else if (state.mistakesMode) {
+            // Przesuń na koniec kolejki powtórek
+            const failed = state.mistakesQueue.shift();
+            state.mistakesQueue.push(failed);
+          }
+        }
+
+        // Przygotuj tabelę całej odmiany w tle
+        renderFullTable(verb, tense, allForms, personIdx);
+
+        // Aktualizuj liczniki
+        updateStatsUI();
+        document.getElementById('btn-submit').textContent = 'Następne pytanie (Enter) →';
+      }
+
+      function skipQuestion() {
+        state.stats.streak = 0;
+        updateStatsUI();
+        nextQuestion();
+      }
+
+      function renderFullTable(verb, tense, allForms, highlightIdx) {
+        document.getElementById('full-table-header').textContent =
+          `${verb.infinitive} — ${TENSE_NAMES[tense]}`;
+        const grid = document.getElementById('full-table-grid');
+        grid.innerHTML = '';
+
+        allForms.forEach((form, idx) => {
+          const row = document.createElement('div');
+          const isCurrent = idx === highlightIdx;
+          row.className = `px-2.5 py-1.5 rounded-lg flex justify-between items-center ${
+            isCurrent ? 'bg-black/10 dark:bg-white/15 font-bold' : 'bg-black/5 dark:bg-white/5'
+          }`;
+          row.innerHTML = `<span class="opacity-75">${PERSONS[idx].label}</span><span class="font-semibold">${form}</span>`;
+          grid.appendChild(row);
+        });
+      }
+
+      function toggleFullTable() {
+        const container = document.getElementById('full-table-container');
+        container.classList.toggle('hidden');
+      }
+
+      function updateStatsUI() {
+        document.getElementById('stat-correct').textContent = state.stats.correct;
+        document.getElementById('stat-wrong').textContent = state.stats.wrong;
+        document.getElementById('stat-streak').textContent = state.stats.streak;
+
+        document.getElementById('stat-correct-mob').textContent = state.stats.correct;
+        document.getElementById('stat-wrong-mob').textContent = state.stats.wrong;
+        document.getElementById('stat-streak-mob').textContent = state.stats.streak;
+      }
+
+      function updateMistakesUI() {
+        const btn = document.getElementById('btn-review-mistakes');
+        const badge = document.getElementById('mistakes-count');
+        badge.textContent = state.mistakesQueue.length;
+
+        if (state.mistakesQueue.length > 0) {
+          btn.classList.remove('hidden');
+          btn.classList.add('inline-flex');
+        } else {
+          btn.classList.add('hidden');
+          btn.classList.remove('inline-flex');
+        }
+      }
+
+      function toggleMistakesMode(forceState) {
+        if (typeof forceState === 'boolean') {
+          state.mistakesMode = forceState;
+        } else {
+          state.mistakesMode = !state.mistakesMode;
+        }
+
+        const banner = document.getElementById('mistakes-banner');
+        if (state.mistakesMode && state.mistakesQueue.length > 0) {
+          banner.classList.remove('hidden');
+        } else {
+          state.mistakesMode = false;
+          banner.classList.add('hidden');
+        }
+        nextQuestion();
+      }
+
+      function insertChar(char) {
+        const input = document.getElementById('answer-input');
+        if (input.disabled) return;
+        const start = input.selectionStart;
+        const end = input.selectionEnd;
+        const val = input.value;
+        input.value = val.substring(0, start) + char + val.substring(end);
+        input.selectionStart = input.selectionEnd = start + char.length;
+        input.focus();
+      }
+
+      function toggleSettings() {
+        document.getElementById('settings-panel').classList.toggle('hidden');
+      }
+
+      function toggleTheme() {
+        document.documentElement.classList.toggle('dark');
+      }
+
+      window.onload = initApp;
+    </script>
+  </body>
+</html>
