@@ -33,6 +33,7 @@ Rejestr zatwierdzonych decyzji. Każdy wpis zawiera datę, status, uzasadnienie 
 | Framework | Next.js 16 App Router + TypeScript |
 | Package manager | pnpm 10.13.1; Node 22 (`engines`, `.nvmrc`, CI) |
 | CI | GitHub Actions: `Code Quality`, `Tests`, `PR Title Check` |
+| Dependabot | tylko security updates (PR-y przy wykrytych podatnościach); version updates wyłączone |
 | Commity | Conventional Commits + commitlint; header ≤72; `subject-case` blokuje sentence/start/pascal/upper-case |
 | Testy | Vitest + Testing Library + jsdom; testy obok komponentów |
 | Branch workflow | GitHub Project „Pasovelo Board” #4 + `pnpm task` |
