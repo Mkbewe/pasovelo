@@ -37,11 +37,11 @@ Kolejność rozwoju: **czasowniki → rzeczowniki i przymiotniki → ewentualnie
 | Częstotliwość | FrequencyWords (OpenSubtitles 2018), dane CC BY-SA 4.0. | zatwierdzone |
 | Poziomy CEFR | Przybliżane na podstawie częstotliwości + ręczne tagowanie. Oznaczane jako orientacyjne. | zatwierdzone |
 | Logowanie | Brak w MVP. Opcjonalne imię i postęp w localStorage. | zatwierdzone |
-| Baza danych | Brak runtime SQLite. JSON generowany w buildzie; SQLite lokalnie w pipeline; Turso tylko jeśli pojawi się sync. | zatwierdzone |
+| Baza danych | Brak runtime DB. JSON generowany w buildzie; SQLite lokalnie w pipeline. Później rozważamy Netlify Database (Postgres), Neon, Supabase lub Turso. | zatwierdzone |
 | SRS | FSRS (`ts-fsrs`). | propozycja |
-| Hosting | Vercel Hobby (non-commercial). Donacje OK; reklamy wymagają Pro lub innego hosta. | zatwierdzone |
+| Hosting | Do decyzji. Rozważamy Netlify (Free, commercial OK), Cloudflare Pages i Railway; Vercel Hobby odpada przy reklamach. **Na razie brak deploymentu.** | propozycja |
 | Monetyzacja | Donacje teraz, reklamy opcjonalnie później. Licencje danych muszą pozwalać na komercję. | zatwierdzone |
-| Testy | Walidacja danych + testy jednostkowe + E2E + CI. | zatwierdzone |
+| Testy | Teraz: CI code quality + PR title check. Później: walidacja danych, testy jednostkowe, E2E. | zatwierdzone |
 | Poza MVP | Konta, płatności, aplikacja mobilna, rzeczowniki/przymiotniki, wiele języków. | zatwierdzone |
 
 ---
@@ -52,7 +52,7 @@ Kolejność rozwoju: **czasowniki → rzeczowniki i przymiotniki → ewentualnie
 
 ```
 Wiktionary / kaikki ─┐
-FrequencyWords ──────┼─> scripts/ingest + validate ─> data/*.json ─> Next.js (Vercel)
+FrequencyWords ──────┼─> scripts/ingest + validate ─> data/*.json ─> Next.js (hosting TBD)
 Tatoeba ─────────────┤                                      │
 LLM (tylko luki) ────┘                                      └─> localStorage / IndexedDB
                                                                (postęp, FSRS, ustawienia)
@@ -73,8 +73,8 @@ Zasada: **treść jest read-only i wersjonowana w repo**, a aplikacja nie potrze
 | Testy | Vitest + Playwright |
 | Pipeline | Node.js + `tsx`, opcjonalnie `better-sqlite3` lokalnie |
 | PWA | Serwist |
-| Hosting | Vercel |
-| CI | GitHub Actions |
+| Hosting | Do decyzji: Netlify / Cloudflare Pages / Railway (Vercel Pro jako fallback) |
+| CI | GitHub Actions: code quality + PR title check |
 
 ### 3.3. Struktura repo
 
@@ -115,9 +115,9 @@ Zasada: **treść jest read-only i wersjonowana w repo**, a aplikacja nie potrze
 
 ### 3.4. Kluczowe decyzje architektoniczne
 
-1. **Statyczne dane zamiast DB w runtime.** Vercel nie ma trwałego dysku; plik SQLite nie przetrwa deployu. JSON jest szybszy, tańszy i prostszy.
+1. **Statyczne dane zamiast DB w runtime.** Hosting serverless nie ma trwałego dysku; plik SQLite nie przetrwa deployu. JSON jest szybszy, tańszy i prostszy.
 2. **Formy są faktami w danych, nie wynikiem działania kodu.** Aplikacja tylko czyta tabelę form.
-3. **Walidacja w CI.** Każdy deploy przechodzi testy integralności danych.
+3. **Walidacja w CI.** Każdy build i przyszły deploy przechodzi testy integralności danych.
 4. **Dane dzielone per czasownik.** `verbs/hablar.json` ładowany lazy; indeks zawiera metadane.
 5. **PWA/offline.** Po pierwszym wejściu dane i postęp działają bez sieci.
 6. **Wersjonowanie schematu.** `meta.json` zawiera wersję danych i listę źródeł.
@@ -443,30 +443,41 @@ pnpm typecheck
 
 ## 9. Hosting, domena, koszty
 
-### 9.1. Vercel
+### 9.1. Hosting — opcje rozważane
 
-- **Hobby:** 100 GB transferu/mies., 1 mln wywołań funkcji, wiele projektów dzieli limity konta.
-- **Non-commercial:** donacje dozwolone; reklamy, płatności i affiliate = commercial.
-- Jeśli reklamy: **Pro ($20/mies.)** albo **Netlify Free / Cloudflare Pages** (sprawdzić regulamin).
-- Brak runtime SQLite; dane statyczne.
-- Domena: **pasovelo.com** (wolna wg DNS; potwierdzić WHOIS), z przekierowaniem z `pasovelo.pl` / `pasovelo.app`.
+**Decyzja: brak deploymentu na tym etapie.** Wracamy do tego po ustabilizowaniu MVP.
+
+- **Netlify** — najbliżej Vercel: oficjalny adapter Next.js, preview per PR, production z `main`. Free plan pozwala na komercję (sprawdzić aktualne limity credits). **Główny kandydat.**
+- **Cloudflare Pages** — darmowe, komercyjne dozwolone; świetne przy statycznym eksporcie (`output: 'export'`). Next.js SSR przez OpenNext jest bardziej złożony.
+- **Railway** — ok. $5/mies., łatwy deploy, pełny Node/Next standalone, wolumeny i SQLite. Dobry, gdy pojawi się backend/sync.
+- **Vercel Pro** — ~$20/mies., zero zmian; fallback, jeśli reklamy pokryją koszt.
+- **Vercel Hobby** — tylko non-commercial; odpada przy reklamach.
+
+**Baza danych:** na razie brak. Później rozważamy **Netlify Database** (managed Postgres, oparty na Neon), **Neon**, **Supabase** albo **Turso** (SQLite/libSQL). Netlify Database jest wygodny, ale działa na planach credit-based — sprawdzić cennik.
+
+**Domena:** `pasovelo.com` (wolna wg DNS; potwierdzić WHOIS), z przekierowaniem z `pasovelo.pl` / `pasovelo.app`.
 
 ### 9.2. Koszty orientacyjne
 
 | Pozycja | Koszt |
 |---|---|
-| Vercel Hobby | $0 |
-| Vercel Pro (jeśli reklamy) | ~$20/mies. |
+| Netlify Free / Cloudflare Pages | $0 (limity/credits) |
+| Railway | ~$5/mies. |
+| Vercel Pro (fallback) | ~$20/mies. |
 | Domena | ~$10–15/rok |
 | Analytics (opcjonalnie) | $0–10/mies. |
 | LLM API (generacja zdań) | zależnie od modelu; jednorazowo |
 
 ### 9.3. CI/CD
 
-- GitHub Actions: lint, typecheck, testy, walidacja danych.
-- Deploy preview na Vercel.
-- Production tylko z zielonym CI.
-- Monitoring: Vercel Analytics / Sentry (opcjonalnie).
+**Teraz konfigurujemy tylko:**
+- GitHub Actions: **code quality** — `typecheck`, `lint`, `format`, `build`.
+- **PR title check** — commitlint na tytule PR.
+
+**Później:**
+- Testy (`Vitest`/`Playwright`) i walidacja danych w CI.
+- Deploy preview / production — po wyborze hostingu.
+- Promote/rollback/release — tylko jeśli będzie potrzebne.
 
 ---
 
@@ -504,7 +515,8 @@ Czasy orientacyjne dla projektu solo, po godzinach. Mogą się zmienić.
 - Wybór domyślnego wariantu (`es-ES` / `es-419`).
 - Potwierdzenie zakresu MVP (4 czasy, 300 czasowników).
 - Scaffold Next.js + TS + Tailwind.
-- Repo, CI, lint, typecheck, testy.
+- Repo, CI: code quality + PR title check; lint, typecheck.
+- Brak deploymentu na tym etapie.
 - Szkic UI na podstawie prototypu.
 
 **Done when:** repo się buduje, CI zielone, decyzje zapisane.
@@ -564,7 +576,7 @@ Czasy orientacyjne dla projektu solo, po godzinach. Mogą się zmienić.
 - SEO, metadata, sitemap.
 - Analytics (opcjonalnie).
 - Formularz zgłaszania błędów.
-- Domena, deploy produkcyjny.
+- Domena, wybór hostingu i deploy produkcyjny (po decyzji).
 - Testy na telefonie.
 
 **Done when:** aplikacja publicznie dostępna, stabilna, zgodna z licencjami.
@@ -609,12 +621,18 @@ Czasy orientacyjne dla projektu solo, po godzinach. Mogą się zmienić.
 
 ### 12.4. CI
 
+Teraz:
 ```bash
-pnpm lint
 pnpm typecheck
+pnpm lint
+pnpm format
+pnpm build
+```
+
+Później:
+```bash
 pnpm test
 pnpm data:validate
-pnpm build
 ```
 
 ---
@@ -628,7 +646,7 @@ pnpm build
 | Słabe pokrycie Tatoeba | średnie | LLM/manualne luki, priorytet top 100 |
 | Niezgodność licencji | wysokie | tylko CC BY/SA, atrybucja, audyt przed reklamami |
 | Kolizja nazwy | średnie | zmiana nazwy, sprawdzenie EUIPO/USPTO, domeny |
-| Limity Vercel | średnie | Hobby na start, Pro/Netlify/Cloudflare przy reklamach |
+| Limity hostingu | średnie | Netlify/Cloudflare/Railway; Vercel Pro tylko jako fallback |
 | Scope creep | wysokie | sztywne MVP, fazy, lista „poza MVP” |
 | Wydajność danych | średnie | podział per czasownik, lazy load, IndexedDB |
 | Utrata postępu (localStorage) | średnie | eksport/import, IndexedDB, później konta |
@@ -643,7 +661,7 @@ pnpm build
 2. **Wariant domyślny:** `es-ES` czy `es-419`?
 3. **Zakres MVP:** 4 czasy i 300 czasowników czy więcej?
 4. **Drill 6 osób:** czy zostawiamy opcjonalne szablony, czy całkowicie rezygnujemy?
-5. **Hosting/monetyzacja:** tylko donacje (Hobby) czy reklamy (Pro/alternatywa)?
+5. **Hosting/monetyzacja:** Netlify vs Cloudflare Pages vs Railway; reklamy/donacje. Decyzja odroczona — brak deploymentu teraz.
 6. **Poziomy:** czy zostawiamy przybliżone CEFR, czy dodajemy własne kategorie?
 7. **Tłumaczenia:** tylko PL, czy też EN?
 8. **Branding:** nazwa, logo, ton komunikacji.
@@ -673,12 +691,12 @@ pnpm build
 ## 16. Następne kroki
 
 1. Podjąć pozostałe decyzje z sekcji 14; nazwa **Pasovelo** jest zatwierdzona.
-2. Zeskaflować repo Next.js + CI.
+2. Zeskaflować repo Next.js + CI: code quality + PR title check.
 3. Napisać pipeline na 20–50 czasownikach.
 4. Port UI z prototypu.
 5. Dodać FSRS i localStorage.
 6. Uruchomić Tatoeba + walidację zdań.
-7. Deploy preview na Vercel.
+7. Wybór hostingu i pierwszy deploy — później.
 
 ---
 
@@ -703,11 +721,15 @@ pnpm build
 - Jehle (tylko cross-check): https://github.com/ghidinelli/fred-jehle-spanish-verbs
 - Vercel Hobby: https://vercel.com/docs/plans/hobby
 - Vercel fair use: https://vercel.com/docs/limits/fair-use-guidelines
+- Netlify: https://www.netlify.com/
+- Netlify Database: https://docs.netlify.com/build/data-and-storage/netlify-database/
+- Cloudflare Pages: https://pages.cloudflare.com/
+- Railway: https://railway.com/
 - Creative Commons: https://creativecommons.org/licenses/
 
 ## Dodatek C — Prototyp
 
-Plik: `trener_odmiany_czasownik_w_hiszpa_skich.html` (w Downloads).
+Plik: `public/prototype.html` (serwowany pod `/prototype.html`; źródło: Downloads).
 
 Co działa:
 
